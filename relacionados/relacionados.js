@@ -106,12 +106,13 @@ function mostrarrelacionados(contenedor) {
 }
 //Eliminar las etiquetas
 function eliminattags(cual,longitud){
-  var resumen = cual.split("<");
-  for(var i=0;i<resumen.length;i++){
-    if(resumen[i].indexOf(">")!=-1){
-      resumen[i] = resumen[i].substring(resumen[i].indexOf(">")+1,resumen[i].length);
-    }
-  }
-  resumen = resumen.join("");
+	var resumen = cual.split("<");
+
+	for(var i=0;i<resumen.length;i++){
+		if(resumen[i].indexOf(">")!=-1){
+			resumen[i] = resumen[i].substring(resumen[i].indexOf(">")+1,resumen[i].length);
+		}
+	}
+	resumen = resumen.join("");
 	return resumen.substring(0,longitud-1)+'...';
 }
