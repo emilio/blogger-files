@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html b:version='2'
+	xmlns='http://www.w3.org/1999/xhtml' 
+	xmlns:b='http://www.google.com/2005/gml/b' 
+	xmlns:data='http://www.google.com/2005/gml/data' 
+	xmlns:expr='http://www.google.com/2005/gml/expr' 
+	xmlns:og='http://opengraphprotocol.org/schema/'
+	expr:dir='data:blog.languageDirection' 
+	lang='es'
+	class='v2 no-js'>
+<head>
+	<!-- script redirección -->
+	<script type='text/javascript'>
+		//<![CDATA[
+		(function(){
+			var URL = document.URL,
+				reg = /\.blogspot\.(com\...|..)\//
+			if( URL.match( reg ) ){
+				window.location = URL.replace( reg, ".blogspot.com\/ncr\/" )
+			}
+		})()
+		// Fallback CSS para cuando no hay javascript
+		document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+		//]]>
+	</script>
+
+	<!--
+		Comentarios condicionales IE -> Permite usar CSS condicionalmente
+		La mejor forma de usarlos sería en el <html>, pero no se puede sin tranformar en entidades
+	-->
+	<!--[if IE 8]>
+		<script type='text/javascript'>document.documentElement.className += ' ie8 lt-ie9'</script>
+	<![endif]-->
+	<!--[if IE 7]>
+		<script type='text/javascript'>document.documentElement.className += ' ie7 lt-ie8 lt-ie9'</script>
+	<![endif]-->
+	<!--[if lt IE 7]>
+		<script type='text/javascript'>document.documentElement.className += ' ie6 lt-ie7 lt-ie8 lt-ie9'</script>
+	<![endif]-->
+
+
+	<!--Meta X-UA-Compatible -> Mejor experiencia para IE -->
+	<meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'/>
+	
+	<!-- meta viewport -> dispositivos móviles -->
+	<meta content='width=device-width,initial-scale=1.0,maximum-scale=1.0' name='viewport'/>
+
+	<!-- Para que indexe Bing [código proporcionado por él] -->
+	<b:if cond='data:blog.url == data:blog.homepageUrl'>
+		<meta content='[CODIGO]' name='msvalidate.01'/>
+	</b:if>
+	
+
+	<!-- Metas para facebook (name=description la incluye all-head-content) -->
+	<!-- <meta property='og:title'> la incluimos donde el título, por conveniencia -->
+	<meta property='og:site_name' expr:content='data:blog.title'/>
+	<meta property='og:type' content='blog'/>
+	<meta expr:content='data:blog.canonicalUrl' property='og:url'>
+	<b:if cond='data:blog.metaDescription'>
+		<meta property='og:description' expr:content='data:blog.metaDescription'/>
+	<b:else />
+		<b:if cond='data:blog.url == data:blog.homepageUrl'>
+			<!-- Metas home -->
+			<meta property='og:description' content='[DESCRIPCION_GENERAL_DEL_BLOG]'/>
+		<b:else />
+			<!--
+				all-head-content incluye la meta description si existe data:blog.metaDescription
+				En el home siempre la hay, pero en este caso concreto no
+			-->
+			<meta name='description' property='og:description' expr:content='data:blog.pageName + ": " + data:blog.title'/>
+		</b:if>
+	</b:if>
+	<!--
+		Meta keywords -> no usada actualmente, pero nunca se sabe ;)
+	-->
+	<meta name='keywords' content='[palabras, clave, separadas, por, coma]'/>
+
+	<!-- Indexación -->
+	<b:if cond='data:blog.pageType == "archive"'>
+		<!-- No queremos indexar en los archivos -->
+		<meta content='noindex,nofollow' name='robots'/>
+	<b:else />
+		<b:if cond='data:blog.pageType == "error_page"'>
+			<!-- Ni en las 404 -->
+			<meta content='noindex,nofollow' name='robots'/>
+		<b:else />
+			<b:if cond='data:blog.pageType == "index"'>
+				<b:if cond='data:blog.homepageUrl == data:blog.url'>
+					<!-- En el home sí -->
+					<meta content='index,follow' name='robots'/>
+				<b:else/>
+					<!--  Pero en el resto de las index no -->
+					<meta content='noindex,nofollow' name='robots'/>
+				</b:if>
+			<b:else />
+				<!-- En el resto (páginas y posts) sí -->
+				<meta content='index,follow' name='robots'/>
+			</b:if>
+		</b:if>
+	</b:if>
+
+	<!-- Links rel=next y rel=prev -> Indexación también -->
+	<b:if cond='data:blog.pageType == "item"'>
+		<b:if cond='data:blog.newerPageUrl'>
+			<link expr:href='data:blog.newerPageUrl' rel='next'/>
+		</b:if>
+		<b:if cond='data:blog.olderPageUrl'>
+			<link expr:href='data:blog.olderPageUrl' rel='prev'/>
+		</b:if>
+	</b:if>
+
+	<!-- Contenido -->
+	<meta content='all' name='audience'/>
+	<meta content='general' name='rating'/>
+
+	<!--
+		En vez de usar:
+			<meta name="language" content="es" />
+		Añade al elemento <html> el atributo lang="es"
+	-->
+	<!-- Título -->
+	<b:if cond='data:blog.url != data:blog.homepageUrl'>
+		<meta property='og:title' expr:content='data:blog.pageName + ": " + data:blog.title'/>
+		<title><data:blog.pageName/>: <data:blog.title/></title>
+	<b:else/>
+		<meta property='og:title' expr:content='data:blog.pageTitle'/>
+		<title><data:blog.pageTitle/></title>
+	</b:if>
+
+	<!--
+		all-head-content. Incluye:
+			=> link[rel=me]
+			=> link[rel=publisher]
+			=> link[rel=canonical]
+			=> link[rel=image_src] si hay una imagen en la entrada
+			=> meta[name=description] si existe data:blog.metaDescription
+			=> meta[htt-equiv=content-type]
+			=> links del feed
+			=> scripts para compatibilidad con HMTL5
+	-->
+	<b:include data='blog' name='all-head-content'/>
+	<!-- /all-head-content -->
